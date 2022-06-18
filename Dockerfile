@@ -11,12 +11,19 @@ run wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.1/l
 run tar xJf llvm-13.0.1.src.tar.xz
 run cd /opt/llvm-13.0.1.src/ && \
     mkdir build && cd build && \
-    cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo .. \
+    cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
         -DLLVM_ENABLE_ASSERTIONS=ON \
         -DLLVM_NO_DEAD_STRIP=ON \
         -DLLVM_USE_SANITIZER=Address \
         -DLLVM_PARALLEL_LINK_JOBS=1 \
         -DLLVM_INCLUDE_BENCHMARKS=OFF \
-        -DLLVM_ENABLE_LTO=OFF \
-        -DCMAKE_INSTALL_PREFIX=/opt/llvm/ && \
-    cmake --build . --target install
+        -DCMAKE_INSTALL_PREFIX=/opt/llvm/
+run cd /opt/llvm-13.0.1.src/build && \
+    cmake --build . --target install-llvm-libraries
+run cd /opt/llvm-13.0.1.src/build && \
+    cmake --build . --target install-llvm-headers
+run cd /opt/llvm-13.0.1.src/build && \
+    cmake --build . --target install-llvm-config
+
+from ghcr.io/evanrichter/cargo-fuzz:latest as built
+copy --from=builder /opt/llvm/ /opt/llvm/
