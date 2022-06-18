@@ -6,6 +6,9 @@ on:
 
 jobs:
   Deploy:
+    strategy:
+    matrix:
+      version: [13.0.1, 14.0.5]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -18,5 +21,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/evanrichter/llvm-asan:13.0.1
+          file: llvm-${{ matrix.version }}.dockerfile
+          tags: ghcr.io/evanrichter/llvm-asan:${{ matrix.version }}
 
