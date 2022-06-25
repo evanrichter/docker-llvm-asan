@@ -8,7 +8,7 @@ jobs:
   Deploy:
     strategy:
       matrix:
-        version: [10.0.1, 11.1.0, 12.0.1, 13.0.1, 14.0.5]
+        version: [10.0.1, 11.1.0, 12.0.1, 13.0.1, 14.0.5, 14.0.5.no-asan]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
